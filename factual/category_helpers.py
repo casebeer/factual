@@ -1,5 +1,3 @@
-import filter_helpers as ops
-
 '''
 Helper functions to handle Factual point of interest category queries and mappings.
 
@@ -7,6 +5,8 @@ These functions assume that the user (a) wants to limit results to the smallest
 set of catgories matching a predefined list and (b) wants to map Factual's category
 labels into his own category labelling system. 
 '''
+
+import filter_helpers as ops
 
 def make_category_filter(categories, blank=True):
 	'''
