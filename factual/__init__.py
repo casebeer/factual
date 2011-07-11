@@ -39,6 +39,9 @@ Basic Usage:
 See also the session.Session and requests.Read documentation.
 '''
 
+APP_NAME = "factual"
+__author__ = "Christopher H. Casebeer"
+__version__ = "0.0.3"
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
