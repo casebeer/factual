@@ -21,14 +21,31 @@ class Request(object):
 		response = self.response_type(*args, **kwargs)
 		return response
 	def unparse_dict(self, d):
-		return urllib.quote(unidecode.unidecode(\
+		return unidecode.unidecode(\
 			json.dumps(d,ensure_ascii=False, \
-					separators=(',',':'))), \
-				'/{}"$:,[]')
+					separators=(',',':')))
 	def join_params(self, params, suppress_null=True):
-		if suppress_null:
-			params = dict([(k,v) for k,v in params.iteritems() if v != None])
-		return "&".join([("%s=%s" % (k,v)) for k,v in params.iteritems()])
+		''' 
+		Custom alternative to urllib.urlencode that keeps URL length
+		down by not unnecessarily escaping JSON special chars {}[],:"'
+
+		suppress_null removes parametrs which are set to None.
+		'''
+		# ensure all params and values are properly urlencoded
+		# since we may have numbers, etc. here, cast to unicode and encode back to utf-8
+		return "&".join([
+					("%s=%s" \
+						% (
+							urllib.quote_plus(unicode(k).encode('utf-8'), '/{}"\'$:,[]'),
+							urllib.quote_plus(unicode(v).encode('utf-8'), '/{}"\'$:,[]')
+						)
+					) 
+					for k,v 
+					in params.iteritems()
+					if not suppress_null or v != None
+				])
+
+				
 	def get_query(self): util.abstract()
 class WriteRequest(Request):
 	pass
@@ -64,11 +81,16 @@ class Read(Request):
 		self._page = 1
 	def get_query(self):
 		filters = dict([(k,v) for k,v in self._filters.iteritems() if v != None])
+
 		params = {
 			"filters": self.unparse_dict(filters),
-			"limit": self._count,
-			"offset": self._count * (self._page - 1)
+			"limit": self._count
 		}
+
+		offset = self._count * (self._page - 1)
+		if offset > 0:
+			params["offset"] = offset
+		
 		return self.join_params(params)
 
 	def count(self, count):
@@ -121,7 +143,7 @@ class Read(Request):
 		return self.filter(filter_helpers.within_(lat, lon, radius))
 	def name(self, term):
 		'''Convenience method to apply a {"name":...} filter'''
-		return self.filter(filter_helpers.eq_("name", "term"))
+		return self.filter(filter_helpers.eq_("name", term))
 class Input(WriteRequest):
 	action = "input"
 	def __init__(self, session, table):
