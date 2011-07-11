@@ -1,0 +1,3 @@
+
+class FactualError(Exception):
+	pass
