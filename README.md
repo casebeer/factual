@@ -15,23 +15,27 @@ You'll need to [get a Factual API key](http://www.factual.com/developers/api_key
     
 You can also build requests one piece at a time:
 
-	from factual.tables import USPOI,USLocalPlaypen
-    query = s.read(USPOI)
-    query.filter({"name": "Foobar"})
-	if test_address != None:
-		query.filter({"address": test_address})
+    from factual.tables import USPOI,USLocalPlaypen
+    query = s.read(USPOI).filter({"name": "Foobar"})
+    if test_address != None:
+        query.filter({"address": test_address})
     response = query.run()
     records = response.records()
     
 Limiting categories and using the filter helper functions:
 
     from factual.filter_helpers import *
-    q = s.read(USPOI).filter(or_(bw_("category", "Food"), bw_("category", "Arts")))
-    q.search("Foobar")
+    q = s.read(USPOI).filter(
+                        or_(
+                            bw_("category", "Food"), 
+                            bw_("category", "Arts")
+                        )
+                      ).search("Foobar")
     records = q.run().records()
     
 Geo queries:
 
+    # lat, lon, radius in meters
     coffee_places = s.read(USPOI).search("coffee").within(40.7353,-73.9912,1000).run().records()
     
 Modify a record in the Playpen:
