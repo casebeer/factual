@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
+from factual import APP_NAME, __version__, __author__
 
 required_modules = [
 	"simplejson",
@@ -8,11 +9,11 @@ required_modules = [
 	]
 
 setup(
-	name="factual",
-	version="0.0.2",
+	name=APP_NAME,
+	version=__version__,
 	description="",
-	author="Christopher H. Casebeer",
-	author_email="chc@plac.es",
+	author=__author__,
+	author_email="",
 	url="",
 	packages=find_packages(exclude='tests'),
 #	entry_points='''
