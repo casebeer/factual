@@ -4,7 +4,6 @@ from setuptools import setup, find_packages
 required_modules = [
 	"simplejson",
 	"httplib2",
-	"urllib",
 	"unidecode",
 	]
 
