@@ -39,8 +39,6 @@ Basic Usage:
 See also the session.Session and requests.Read documentation.
 '''
 
-from _manifest import *
-
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
