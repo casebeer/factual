@@ -9,7 +9,7 @@ required_modules = [
 
 setup(
 	name="factual",
-	version="0.0.4rc1",
+	version="0.0.4rc2",
 	description="",
 	author="Christopher H. Casebeer",
 	author_email="",
