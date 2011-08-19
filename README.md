@@ -1,6 +1,6 @@
 # Factual Server API  Wrapper
 
-This package wraps the Factual "Server" API. Its query style is SQLAlchemy-inspired and designed
+This package wraps the Factual v2 "Server" API. Its query style is SQLAlchemy-inspired and designed
 to make it easy to build "read" requests by chaining filter calls together. 
 
 API actions other than "read" are supported via the same syntax for consistency. 
