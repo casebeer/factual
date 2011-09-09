@@ -109,6 +109,10 @@ class FactualRequest(object):
 		return self.filter(eq_("name", "term"))
 		
 	def GET(self):
+		'''
+		Note: this function can raise JsonDecode exceptions if Factual doesn't provide 
+		valid JSON – as when they are doing maintenance. 
+		'''
 		url = self.get_url()
 		logging.debug(url)
 		h = httplib2.Http()
