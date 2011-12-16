@@ -3,3 +3,5 @@
 dist/
 build/
 factual.egg-info/
+distribute-*.egg
+distribute-*.tar.gz
