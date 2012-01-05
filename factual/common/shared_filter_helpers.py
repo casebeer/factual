@@ -38,9 +38,7 @@ def bw_(field, term):
 	return field_filter("$bw", field, term)
 def search_(term):
 	return {"$search": term}
-# geo ops
-def within_(lat, lon, radius=1500):
-	return {"$loc": {"$within": {"$center":[[ GeoScalar(lat), GeoScalar(lon)], radius]}}}
+
 # numeric ops
 def gt_(field, term):
 	return field_filter("$gt", field, term)

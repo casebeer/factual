@@ -6,7 +6,7 @@ set of catgories matching a predefined list and (b) wants to map Factual's categ
 labels into his own category labelling system. 
 '''
 
-import filter_helpers as ops
+import shared_filter_helpers as ops
 
 def make_category_filter(categories, blank=True):
 	'''
