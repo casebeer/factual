@@ -1,6 +1,11 @@
 import datetime
 import time
 
+class GeoScalar(float):
+	'''Class to wrap floats used for geo coords in order to get pretty formatting from simplejson.'''
+	def __repr__(self):
+		return "%0.6f" % (self)
+
 ### Factual filter functions
 def _prep_factual_term(term):
 	# ensure dates are converted to epoch
@@ -35,7 +40,7 @@ def search_(term):
 	return {"$search": term}
 # geo ops
 def within_(lat, lon, radius=1500):
-	return {"$loc": {"$within": {"$center":[[lat, lon], radius]}}}
+	return {"$loc": {"$within": {"$center":[[ GeoScalar(lat), GeoScalar(lon)], radius]}}}
 # numeric ops
 def gt_(field, term):
 	return field_filter("$gt", field, term)
