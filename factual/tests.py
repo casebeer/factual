@@ -2,7 +2,11 @@
 Tests for Factual v2 "Server" API wrapper
 '''
 
+import nose
+from nose.tools import eq_
+
 import factual.v2 as v2
+import factual.v3 as v3
 import factual.common as common
 from factual.v2 import tables
 
@@ -78,11 +82,13 @@ API_KEY='deadbeef'
 
 def setup():
 	global v2_session,\
+	       v3_session,\
 	       standard_categories,\
 		   standard_categories_with_blank_category,\
 		   standard_filters,\
 		   standard_filters_with_blank_category
 	v2_session = v2.Session(api_key=API_KEY)
+	v3_session = v3.Session(api_key=API_KEY)
 
 	standard_categories = common.category_helpers.make_category_filter(categories,blank=False)
 	standard_categories_with_blank_category = common.category_helpers.make_category_filter(categories,blank=True)
@@ -154,12 +160,34 @@ def test_search_query():
 #	v3_expected = 'limit=20&q=coffee+and+tea'
 #	yield query_check_helper, v3_query, v3_expected
 
+def test_url_from_table_type():
+	v2_query = v2_session.read(tables.USPOI)
+	eq_(v2_session.get_url(v2_query), 'http://api.factual.com/v2/tables/s4OOB4/read?api_key=deadbeef&limit=20')
+def test_url_from_table_instance():
+	v2_query = v2_session.read(tables.USPOI())
+	eq_(v2_session.get_url(v2_query), 'http://api.factual.com/v2/tables/s4OOB4/read?api_key=deadbeef&limit=20')
+def test_url_from_table_parent_instance():
+	v2_query = v2_session.read(common.util.Table("s4OOB4"))
+	eq_(v2_session.get_url(v2_query), 'http://api.factual.com/v2/tables/s4OOB4/read?api_key=deadbeef&limit=20')
+def test_url_from_table_string():
+	v2_query = v2_session.read("s4OOB4")
+	eq_(v2_session.get_url(v2_query), 'http://api.factual.com/v2/tables/s4OOB4/read?api_key=deadbeef&limit=20')
+
+def test_v3_url_from_table_parent_instance():
+	v3_query = v3_session.read(common.util.Table("places"))
+	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?KEY=deadbeef&limit=20')
+def test_v3_url_from_table_string():
+	v3_query = v3_session.read("places")
+	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?KEY=deadbeef&limit=20')
+
 #### v2 only
 
 def test_v2_geo_query():
 	query = v2_session.read(tables.USPOI).search("coffee").within(40.7353,-73.9912,1000)
 	query_check_helper(query, \
 		'limit=20&filters={"$loc":{"$within":{"$center":[[40.735300,-73.991200],1000]}},"$search":"coffee"}')
+
+	print v2_session.get_url(query)
 
 def test_v2_category_and_radius_query():
 	query = v2_session.read(tables.USPOI)
@@ -171,9 +199,13 @@ def test_v2_category_and_radius_query():
 
 #### v3 only
 
-#def test_v3_geo_query_compat():
-#	# old style "within" compat
-#	query = v3_session.read("places").search("coffee").within(40.7353,-73.9912,1000)
+def test_v3_geo_query_compat():
+	# old style "within" compat
+	query = v3_session.read("places").search("coffee").within(40.7353,-73.9912,1000)
+	query_check_helper(query, 'q=coffee&geo={"$circle":{"$center":[40.735300,-73.991200],"$meters":1000}}&limit=20')
+
+	print v3_session.get_url(query)
+
 #def test_v3_geo_query_new_style():
 #	# new style circle
 #	query = v3_session.read("places").search("coffee").filter({"$circle":{"$center":[40.7353,-73.9912], "$meters":1000}})
