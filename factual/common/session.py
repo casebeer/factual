@@ -30,17 +30,23 @@ class BaseSession(object):
 		'''Provide an api_key to use with the Factual API.'''
 		self.api_key = api_key
 		self.api_base = api_base
-	def run(self, request):
-		url = self._url_pat % {
+	def get_url(self, request):
+		return self._url_pat % {
 				'api_base': self.api_base,
 				'table_id': request.table,
 				'action':   request.action,
 				'api_key':  self.api_key,
 				'query':    request.get_query()
 			}
+	def get_headers(self, request):
+		return {}
+	def run(self, request):
+		url = self.get_url(request)
+		headers = self.get_headers(request)
+
 		logging.debug(url)
 		h = httplib2.Http()
-		http_response, http_body = h.request(url)
+		http_response, http_body = h.request(url, headers=headers)
 		# todo: timing and other metrics
 		meta = {}
 		response = request.make_response(json.loads(http_body), meta=meta)
