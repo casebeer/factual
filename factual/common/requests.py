@@ -84,7 +84,7 @@ class Read(Request):
 		filters = dict([(k,v) for k,v in self._filters.iteritems() if v != None])
 
 		params = {
-			"filters": self.unparse_dict(filters),
+			"filters": self.unparse_dict(filters) if filters != {} else None,
 			"limit": self._count
 		}
 
