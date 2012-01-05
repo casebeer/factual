@@ -81,6 +81,8 @@ class Read(Request):
 		self._count = 20
 		self._page = 1
 	def get_query(self):
+		return self.join_params(self.get_params())
+	def get_params(self):
 		filters = dict([(k,v) for k,v in self._filters.iteritems() if v != None])
 
 		params = {
@@ -91,9 +93,8 @@ class Read(Request):
 		offset = self._count * (self._page - 1)
 		if offset > 0:
 			params["offset"] = offset
-		
-		return self.join_params(params)
 
+		return params
 	def count(self, count):
 		'''Set the number of results to return per page. N.B. Factual caps this at 50.'''
 		self._count = count 
