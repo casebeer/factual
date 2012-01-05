@@ -136,9 +136,6 @@ class Read(Request):
 		'''
 		self._filters.update(filter)
 		return self # chainable
-	def search(self, search_term):
-		'''Convenience method to apply a {"$search":...} filter'''
-		return self.filter(shared_filter_helpers.search_(search_term))
 	def name(self, term):
 		'''Convenience method to apply a {"name":...} filter'''
 		return self.filter(shared_filter_helpers.eq_("name", term))

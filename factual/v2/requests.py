@@ -7,6 +7,9 @@ import filter_helpers
 class Read(factual.common.requests.Read):
 	'''Override response_type with correct ReadResponse type'''
 	response_type = responses.V2ReadResponse
+	def search(self, search_term):
+		'''Convenience method to apply a {"$search":...} filter'''
+		return self.filter(filter_helpers.search_(search_term))
 	def within(self, lat, lon, radius):
 		'''Convenience method to apply a $loc/$within/$center filter. Radius is in meters.'''
 		return self.filter(filter_helpers.within_(lat, lon, radius))
