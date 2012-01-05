@@ -33,7 +33,7 @@ class BaseSession(object):
 	def run(self, request):
 		url = self._url_pat % {
 				'api_base': self.api_base,
-				'table_id': request.table.id,
+				'table_id': request.table,
 				'action':   request.action,
 				'api_key':  self.api_key,
 				'query':    request.get_query()

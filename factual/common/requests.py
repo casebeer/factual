@@ -14,7 +14,8 @@ class Request(object):
 	response_type = responses.Response
 	def __init__(self, session, table):
 		self.session = session
-		self.table = table
+		# instantiate the table class if we're passed a type rather than an instance (or a string)
+		self.table = table() if isinstance(table, type) else table
 	def run(self):
 		return self.session.run(self)
 	def make_response(self, *args, **kwargs):
