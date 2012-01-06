@@ -41,7 +41,7 @@ helper method of <tt>read</tt>.  <tt>within()</tt> chains and applies like any o
 last call will overwrite earlier geo filters.  The underlying Factual filter API has changed between v2 and v3, but 
 this will work for both:
 
-    query = session.read("places").within(within(40.7353,-73.9912,1000).search("coffee")
+    query = session.read("places").within(40.7353,-73.9912,1000).search("coffee")
 
 ### Pagination
 
