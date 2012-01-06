@@ -20,8 +20,7 @@ class BaseSession(object):
 	Examples:
 
 		s = Session(api_key="deadbeef")
-		records = s.read(tables.USPOI).search("coffee").run().records()
-		s.rate(tables.USLocalPlaypen).subject_key("foobar").rate(1).run()
+		records = s.read("places").search("coffee").run().records()
 	
 	Note that "Session" is meant loosely in the "login session" sense, *not* the "transaction" sense.
 	'''

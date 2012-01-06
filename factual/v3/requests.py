@@ -17,11 +17,17 @@ class Read(factual.common.requests.Read):
 		params["q"] = self._search
 		return params
 	def search(self, search_term):
-		'''Apply a "q=..." search filter'''
+		'''
+		Apply a "q=..." search filter. Separate terms with commas for OR queries. 
+		Subsequent search() calls replace any previous search terms on this query.
+		'''
 		self._search = search_term
 		return self
 	def within(self, lat, lon, radius):
-		'''Apply a geo=$circle/$center filter. Radius is in meters.'''
+		'''
+		Apply a geo=$circle/$center filter. Radius is in meters. Subsequent within() 
+		calls replace earlier geo filters on this query.
+		'''
 		self._geo = { "$circle": { 
 						"$center": [
 							factual.common.shared_filter_helpers.GeoScalar(lat), 

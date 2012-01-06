@@ -56,13 +56,13 @@ class Read(Request):
 
 	Read objects should be created by calling read(<Table type>) on a Session object:
 		s = Session()
-		query = s.read(tables.USPOI)
+		query = s.read("places")
 	
 	Creating a query object this way automatically binds it to the Session and Table.
 	
 	A Read query can be customized with filters and other paramters. Read objects'
 	functions return the same Read object, making them chainable:
-		query = s.read(tables.USPOI)
+		query = s.read("places")
 		query = query.filter({"name":"foobar"}).filter({"address":"123 Main St."})
 	
 	Once a query is ready, call run to get a Result object. Read queries return
