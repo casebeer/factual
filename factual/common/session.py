@@ -37,14 +37,15 @@ class BaseSession(object):
 				'api_key':  self.api_key,
 				'query':    request.get_query()
 			}
-	def get_headers(self, request):
-		return {}
+	def get_headers(self, request, defaults={}):
+		return {}.update(defaults)
 	def run(self, request):
 		url = self.get_url(request)
 		headers = self.get_headers(request)
 
 		logging.debug(url)
 		logging.debug(headers)
+
 		h = httplib2.Http()
 		http_response, http_body = h.request(url, headers=headers)
 		# todo: timing and other metrics

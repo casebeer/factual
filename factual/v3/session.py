@@ -52,7 +52,8 @@ class Session(factual.common.session.BaseSession):
 				'action':   request.action,
 				'query':    query
 			}
-	def get_headers(self, request, headers={}):
+	def get_headers(self, request, defaults={}):
+		headers = {}
 		if self.consumer:
 			# only do OAuth if we have a consumer_secret to use, else fall back to api_key in URL
 
@@ -72,6 +73,7 @@ class Session(factual.common.session.BaseSession):
 			# pass None as the Token since Factual's API is 2-legged OAuth only
 			request.sign_request(self.oauth_signature_method, self.consumer, None)
 			headers.update(request.to_header())
+		headers.update(defaults)
 		return headers
 	def read(self, table):
 		'''Build a Read request on the provided Table type using this Session. See the requests module for details.'''
