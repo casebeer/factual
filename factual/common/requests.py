@@ -37,8 +37,8 @@ class Request(object):
 		return "&".join([
 					("%s=%s" \
 						% (
-							urllib.quote_plus(unicode(k).encode('utf-8'), '/{}"\'$:,[]'),
-							urllib.quote_plus(unicode(v).encode('utf-8'), '/{}"\'$:,[]')
+							urllib.quote_plus(unicode(k).encode('utf-8'), '/{}\'$:,[]'),
+							urllib.quote_plus(unicode(v).encode('utf-8'), '/{}\'$:,[]')
 						)
 					) 
 					for k,v 
