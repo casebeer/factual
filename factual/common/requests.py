@@ -28,7 +28,16 @@ class Request(object):
 	def join_params(self, params, suppress_null=True):
 		''' 
 		Custom alternative to urllib.urlencode that keeps URL length
-		down by not unnecessarily escaping JSON special chars {}[],:"'
+		down by not escaping certain special characters that Factual
+		can tolerate unescaped. This is especially useful for the 
+		JSON special chars {}[],:. 
+
+		The full list of usually-escaped-but-ok-for-factual characters is:
+
+		    / { } ' $ : , [ ]
+
+		The API used to tolerate doublequotes, but this seems to have 
+		changed. 
 
 		suppress_null removes parametrs which are set to None.
 		'''
