@@ -13,10 +13,10 @@ and in this wrapper. The v3 version of the wrapper is now the default.
 To get started, you'll need to [get a Factual API key][factual_api_key] (requires sign up).
 
 First, create a Session using your v3 API key. At the moment, there is no OAuth support, so your API key 
-is simply your OAuth Consumer ID (*not* your consumer key!):
+is simply your OAuth consumer key (*not* your consumer secret!):
 
     import factual
-	session = factual.Session(api_key="myOAuthConsumerId")
+	session = factual.Session(api_key="myOAuthConsumerKey")
 
 Now, build a query using the <tt>read</tt> action on the <tt>"places"</tt> table:
 
