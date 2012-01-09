@@ -24,9 +24,9 @@ First, create a Session using your v3 API OAuth consumer key and consumer secret
                              consumer_secret="myOAuthConsumerSecret"
                              )
 
-Now, build a query using the <tt>read</tt> action on the <tt>"places"</tt> table:
+Now, build a query using the <tt>read</tt> action on the <tt>"global"</tt> table:
 
-    query = session.read("places")
+    query = session.read("global")
 
 You can apply as many filters as you'd like to the query. Filters on a query are cumulative, and can be chained:
 
@@ -47,7 +47,7 @@ helper method of <tt>read</tt>.  <tt>within()</tt> chains and applies like any o
 last call will overwrite earlier geo filters.  The underlying Factual filter API has changed between v2 and v3, but 
 this will work for both:
 
-    query = session.read("places").within(40.7353,-73.9912,1000).search("coffee")
+    query = session.read("global").within(40.7353,-73.9912,1000).search("coffee")
 
 ### Pagination
 
@@ -80,7 +80,7 @@ Pass <tt>blank = True</tt> as a kwarg to <tt>make_category_filter</tt> if you al
 	my_filters = category_helpers.make_category_filter(my_categories, blank=True)
     # {'$or': ({'category': {'$bw': 'Food & Beverage'}}, {'category': {'$bw': 'Shopping'}}, {'category': {'$blank': True}})}
 
-	query = s.read("places").filter(my_filters)
+	query = s.read("global").filter(my_filters)
 
 ### Non-OAuth requests
 
@@ -97,11 +97,11 @@ so use OAuth if possible.
 
     from factual import *
     s = Session(consumer_key="deadbeef", consumer_secret="foobar")
-    my_place = s.read("places").search("coffee").run().records()[0]
+    my_place = s.read("global").search("coffee").run().records()[0]
     
 Building requests one piece at a time:
 
-    query = s.read("places")
+    query = s.read("global")
 	query.filter({"name": "Foobar"})
     if my_address != None:
         query.filter({"address": my_address})
@@ -111,7 +111,7 @@ Building requests one piece at a time:
 Limiting categories and using the filter helper functions:
 
     from factual.filter_helpers import *
-    q = s.read("places").filter(
+    q = s.read("global").filter(
                         or_(
                             bw_("category", "Food"), 
                             bw_("category", "Arts")
