@@ -44,6 +44,7 @@ class BaseSession(object):
 		headers = self.get_headers(request)
 
 		logging.debug(url)
+		logging.debug(headers)
 		h = httplib2.Http()
 		http_response, http_body = h.request(url, headers=headers)
 		# todo: timing and other metrics

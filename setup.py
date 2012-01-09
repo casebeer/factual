@@ -9,6 +9,7 @@ required_modules = [
 	"simplejson",
 	"httplib2",
 	"unidecode",
+	"oauth2"
 	]
 
 setup(

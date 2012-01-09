@@ -8,15 +8,21 @@ There is also limited support for v2 API, including actions other than "read," u
 Note that there are minor API inconsistencies between the v2 and v3 versions, both on the server side 
 and in this wrapper. The v3 version of the wrapper is now the default.
 
+### API access
+
+To get started, you'll need Factual API OAuth credentials. Since
+the v3 API is still officially in beta, you'll have to request access via their 
+[beta signup form][factual_beta_signup].
+
 ## Usage
 
-To get started, you'll need to [get a Factual API key][factual_api_key] (requires sign up).
-
-First, create a Session using your v3 API key. At the moment, there is no OAuth support, so your API key 
-is simply your OAuth consumer key (*not* your consumer secret!):
+First, create a Session using your v3 API OAuth consumer key and consumer secret:
 
     import factual
-	session = factual.Session(api_key="myOAuthConsumerKey")
+	session = factual.Session(
+                             consumer_key="myOAuthConsumerKey",
+                             consumer_secret="myOAuthConsumerSecret"
+                             )
 
 Now, build a query using the <tt>read</tt> action on the <tt>"places"</tt> table:
 
@@ -75,12 +81,22 @@ Pass <tt>blank = True</tt> as a kwarg to <tt>make_category_filter</tt> if you al
     # {'$or': ({'category': {'$bw': 'Food & Beverage'}}, {'category': {'$bw': 'Shopping'}}, {'category': {'$blank': True}})}
 
 	query = s.read("places").filter(my_filters)
-	
+
+### Non-OAuth requests
+
+It's possible to skip OAuth for the v3 API, if, for instance, there's some trouble with 
+signing requests. Creating a Session without a <tt>consumer_secret</tt> will authenticate
+requests via the <tt>KEY</tt> query string parameter rather than OAuth:
+
+    non_oauth_session = factual.Session(consumer_key="myOAuthConsumerKey")
+
+Note that Factual [discourages falling back to the <tt>KEY</tt> parameter][factual_requests_KEY], 
+so use OAuth if possible.
 
 ## Examples
 
     from factual import *
-    s = Session(api_key="deadbeef")
+    s = Session(consumer_key="deadbeef", consumer_secret="foobar")
     my_place = s.read("places").search("coffee").run().records()[0]
     
 Building requests one piece at a time:
@@ -108,12 +124,15 @@ Geo queries:
     # lat, lon, radius in meters
     coffee_places = s.read(places).search("coffee").within(40.7353,-73.9912,1000).run().records()
 
+## Factual v2 "Server" API
+
 To use the v2 API, instantiate a factual.v2.Session object instead of a factual.Session object:
 
     v2_session = factual.v2.Session(api_key="deadbeef")
 	...
 
-Note that you'll need to use a v2 API key. 
+Note that you'll need to provide a v2 API key using the <tt>api_key</tt> argument. Factual
+issues v2 API keys via a different process than for v3 API credentials. 
     
 In the v2 API, you can also modify a record in the Playpen:
 
@@ -126,9 +145,10 @@ See also the Python documentation for session.Session and requests.Read and [Fac
 
 ## TODO
 
-- OAuth support for v3
 - Write support for v3, when available
 - Multiple search filters (search filters currently replace one another)
 
 [factual_docs]: http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3
 [factual_api_key]: http://www.factual.com/developers/api_key
+[factual_requests_KEY]: http://developer.factual.com/display/docs/Core+API+-+Composing+Requests#CoreAPI-ComposingRequests-KEY
+[factual_beta_signup]: http://www.factual.com/devtools/beta
