@@ -12,7 +12,8 @@ class Response(object):
 		self.response = body.get("response", {})
 
 		if self.status == "error":
-			raise exceptions.FactualError(body.get("error"))
+			error = "\"%s\" error: %s" % (body.get("error_type"), body.get("message"))
+			raise exceptions.FactualError(error)
 	def __repr__(self):
 		if len(self.response) > 3:
 			response_repr = "%d records in response" % len(self.response)
