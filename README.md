@@ -31,7 +31,7 @@ Now, build a query using the <tt>read</tt> action on the <tt>"global"</tt> table
 You can apply as many filters as you'd like to the query. Filters on a query are cumulative, and can be chained:
 
     query.search("coffee")
-	query.filter({"city": "Springfield"}).filter({"region":"NY"})
+	query.filter({"locality": "Albany"}).filter({"region":"NY"})
 
 When you're done, <tt>run()</tt> the query and retrieve the results using the <tt>records()</tt> method:
 
