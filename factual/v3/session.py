@@ -58,7 +58,7 @@ class Session(factual.common.session.BaseSession):
 			# only do OAuth if we have a consumer_secret to use, else fall back to api_key in URL
 
 			# todo: check that Factual API is always GET/blank body/not form encoded
-			request = oauth2.Request.from_consumer_and_token(
+			oauth_request = oauth2.Request.from_consumer_and_token(
 								consumer=self.consumer,
 								token=None,
 
@@ -71,8 +71,8 @@ class Session(factual.common.session.BaseSession):
 								)
 
 			# pass None as the Token since Factual's API is 2-legged OAuth only
-			request.sign_request(self.oauth_signature_method, self.consumer, None)
-			headers.update(request.to_header())
+			oauth_request.sign_request(self.oauth_signature_method, self.consumer, None)
+			headers.update(oauth_request.to_header())
 		headers.update(defaults)
 		return headers
 	def read(self, table):
