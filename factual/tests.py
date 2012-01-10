@@ -105,7 +105,7 @@ def query_check_helper(query, expected):
 
 def check_name_query(session):
 	query = session.read(tables.USPOI).filter({"name":"foobar"})
-	query_check_helper(query, 'limit=20&filters={"name":"foobar"}')
+	query_check_helper(query, 'limit=20&filters={%22name%22:%22foobar%22}')
 
 def check_or_query(session):
 	query = session.read(tables.USPOI).filter(
@@ -115,18 +115,18 @@ def check_or_query(session):
 											)
 										).search("Foobar")
 	query_check_helper(query, \
-		'limit=20&filters={"$or":[{"category":{"$bw":"Food"}},{"category":{"$bw":"Arts"}}],"$search":"Foobar"}')
+		'limit=20&filters={%22$or%22:[{%22category%22:{%22$bw%22:%22Food%22}},{%22category%22:{%22$bw%22:%22Arts%22}}],%22$search%22:%22Foobar%22}')
 
 def check_category_filtering(session):
 	query = session.read(tables.USPOI)
 	query.filter(standard_categories)
 	query_check_helper(query, \
-		'''limit=20&filters={"$or":[{"category":{"$bw":"Arts,+Entertainment+%26+Nightlife"}},{"category":{"$bw":"Community+%26+Government+%3E+Day+Care+%26+Preschools"}},{"category":{"$bw":"Community+%26+Government+%3E+Dry+Cleaning,+Ironing+%26+Laundry"}},{"category":{"$bw":"Community+%26+Government+%3E+Libraries"}},{"category":{"$bw":"Community+%26+Government+%3E+Religious"}},{"category":{"$bw":"Education"}},{"category":{"$bw":"Food+%26+Beverage"}},{"category":{"$bw":"Legal+%26+Financial+%3E+Banking+%26+Financing"}},{"category":{"$bw":"Personal+Care+%26+Services"}},{"category":{"$bw":"Shopping"}},{"category":{"$bw":"Sports+%26+Recreation"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Airports"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Historical+Sites"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Horse-Drawn+Vehicles"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Lodging"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Monuments"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Parking"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Public+Transportation+%26+Transit"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Railroads+%26+Trains"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Resorts"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Taxi+%26+Car+Services"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Tourist+Attractions"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Wineries+%26+Vineyards"}}]}''')
+		'''limit=20&filters={%22$or%22:[{%22category%22:{%22$bw%22:%22Arts,+Entertainment+%26+Nightlife%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Day+Care+%26+Preschools%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Dry+Cleaning,+Ironing+%26+Laundry%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Libraries%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Religious%22}},{%22category%22:{%22$bw%22:%22Education%22}},{%22category%22:{%22$bw%22:%22Food+%26+Beverage%22}},{%22category%22:{%22$bw%22:%22Legal+%26+Financial+%3E+Banking+%26+Financing%22}},{%22category%22:{%22$bw%22:%22Personal+Care+%26+Services%22}},{%22category%22:{%22$bw%22:%22Shopping%22}},{%22category%22:{%22$bw%22:%22Sports+%26+Recreation%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Airports%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Historical+Sites%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Horse-Drawn+Vehicles%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Lodging%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Monuments%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Parking%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Public+Transportation+%26+Transit%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Railroads+%26+Trains%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Resorts%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Taxi+%26+Car+Services%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Tourist+Attractions%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Wineries+%26+Vineyards%22}}]}''')
 
 def check_uuid_lookup(session):
 	query = session.read(tables.USPOI)
 	query.filter({'factual_id': 'b3b08e30-8e3b-012e-06c9-003048c87378'})
-	query_check_helper(query, 'limit=20&filters={"factual_id":"b3b08e30-8e3b-012e-06c9-003048c87378"}')
+	query_check_helper(query, 'limit=20&filters={%22factual_id%22:%22b3b08e30-8e3b-012e-06c9-003048c87378%22}')
 
 #### Shared test generators
 #
@@ -153,7 +153,7 @@ def test_uuid_lookup():
 # These will differ as noted:
 def test_search_query():
 	v2_query = v2_session.read(tables.USPOI).search("coffee and tea")
-	v2_expected = 'limit=20&filters={"$search":"coffee+and+tea"}'
+	v2_expected = 'limit=20&filters={%22$search%22:%22coffee+and+tea%22}'
 	yield query_check_helper, v2_query, v2_expected
 
 #	v3_query = v3_session.read(tables.USPOI).search("coffee and tea")
@@ -175,17 +175,17 @@ def test_url_from_table_string():
 
 def test_v3_url_from_table_parent_instance():
 	v3_query = v3_session.read(common.util.Table("places"))
-	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?KEY=deadbeef&limit=20')
+	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?limit=20&KEY=deadbeef')
 def test_v3_url_from_table_string():
 	v3_query = v3_session.read("places")
-	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?KEY=deadbeef&limit=20')
+	eq_(v3_session.get_url(v3_query), 'http://api.v3.factual.com/t/places/read?limit=20&KEY=deadbeef')
 
 #### v2 only
 
 def test_v2_geo_query():
 	query = v2_session.read(tables.USPOI).search("coffee").within(40.7353,-73.9912,1000)
 	query_check_helper(query, \
-		'limit=20&filters={"$loc":{"$within":{"$center":[[40.735300,-73.991200],1000]}},"$search":"coffee"}')
+		'limit=20&filters={%22$loc%22:{%22$within%22:{%22$center%22:[[40.735300,-73.991200],1000]}},%22$search%22:%22coffee%22}')
 
 	print v2_session.get_url(query)
 
@@ -194,7 +194,7 @@ def test_v2_category_and_radius_query():
 	query.filter(standard_filters_with_blank_category)
 	query.filter(v2.filter_helpers.within_(40.7353, -73.9912, 1500000))
 	query_check_helper(query, \
-		'''limit=20&filters={"$or":[{"category":{"$bw":"Arts,+Entertainment+%26+Nightlife"}},{"category":{"$bw":"Community+%26+Government+%3E+Day+Care+%26+Preschools"}},{"category":{"$bw":"Community+%26+Government+%3E+Dry+Cleaning,+Ironing+%26+Laundry"}},{"category":{"$bw":"Community+%26+Government+%3E+Libraries"}},{"category":{"$bw":"Community+%26+Government+%3E+Religious"}},{"category":{"$bw":"Education"}},{"category":{"$bw":"Food+%26+Beverage"}},{"category":{"$bw":"Legal+%26+Financial+%3E+Banking+%26+Financing"}},{"category":{"$bw":"Personal+Care+%26+Services"}},{"category":{"$bw":"Shopping"}},{"category":{"$bw":"Sports+%26+Recreation"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Airports"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Historical+Sites"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Horse-Drawn+Vehicles"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Lodging"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Monuments"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Parking"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Public+Transportation+%26+Transit"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Railroads+%26+Trains"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Resorts"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Taxi+%26+Car+Services"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Tourist+Attractions"}},{"category":{"$bw":"Travel+%26+Tourism+%3E+Wineries+%26+Vineyards"}},{"category":{"$blank":true}}],"status":1,"$loc":{"$within":{"$center":[[40.735300,-73.991200],1500000]}}}''')
+		'''limit=20&filters={%22$or%22:[{%22category%22:{%22$bw%22:%22Arts,+Entertainment+%26+Nightlife%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Day+Care+%26+Preschools%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Dry+Cleaning,+Ironing+%26+Laundry%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Libraries%22}},{%22category%22:{%22$bw%22:%22Community+%26+Government+%3E+Religious%22}},{%22category%22:{%22$bw%22:%22Education%22}},{%22category%22:{%22$bw%22:%22Food+%26+Beverage%22}},{%22category%22:{%22$bw%22:%22Legal+%26+Financial+%3E+Banking+%26+Financing%22}},{%22category%22:{%22$bw%22:%22Personal+Care+%26+Services%22}},{%22category%22:{%22$bw%22:%22Shopping%22}},{%22category%22:{%22$bw%22:%22Sports+%26+Recreation%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Airports%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Historical+Sites%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Horse-Drawn+Vehicles%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Lodging%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Monuments%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Parking%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Public+Transportation+%26+Transit%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Railroads+%26+Trains%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Resorts%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Taxi+%26+Car+Services%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Tourist+Attractions%22}},{%22category%22:{%22$bw%22:%22Travel+%26+Tourism+%3E+Wineries+%26+Vineyards%22}},{%22category%22:{%22$blank%22:true}}],%22status%22:1,%22$loc%22:{%22$within%22:{%22$center%22:[[40.735300,-73.991200],1500000]}}}''')
 
 
 #### v3 only
@@ -202,7 +202,7 @@ def test_v2_category_and_radius_query():
 def test_v3_geo_query_compat():
 	# old style "within" compat
 	query = v3_session.read("places").search("coffee").within(40.7353,-73.9912,1000)
-	query_check_helper(query, 'q=coffee&geo={"$circle":{"$center":[40.735300,-73.991200],"$meters":1000}}&limit=20')
+	query_check_helper(query, 'q=coffee&geo={%22$circle%22:{%22$center%22:[40.735300,-73.991200],%22$meters%22:1000}}&limit=20')
 
 	print v3_session.get_url(query)
 
