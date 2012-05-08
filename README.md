@@ -8,11 +8,9 @@ There is also limited support for v2 API, including actions other than "read," u
 Note that there are minor API inconsistencies between the v2 and v3 versions, both on the server side 
 and in this wrapper. The v3 version of the wrapper is now the default.
 
-### API access
+## API access
 
-To get started, you'll need Factual API OAuth credentials. Since
-the v3 API is still officially in beta, you'll have to request access via their 
-[beta signup form][factual_beta_signup].
+To get started, you'll need to [register for Factual API OAuth credentials][factual_signup]. 
 
 ## Usage
 
@@ -91,7 +89,7 @@ requests via the <tt>KEY</tt> query string parameter rather than OAuth:
     non_oauth_session = factual.Session(consumer_key="myOAuthConsumerKey")
 
 Note that Factual [discourages falling back to the <tt>KEY</tt> parameter][factual_requests_KEY], 
-so use OAuth if possible.
+and intends it for debugging use only, so use OAuth if possible.
 
 ## Examples
 
@@ -128,6 +126,7 @@ Geo queries:
 
 To use the v2 API, instantiate a factual.v2.Session object instead of a factual.Session object:
 
+    import factual
     v2_session = factual.v2.Session(api_key="deadbeef")
 	...
 
@@ -149,6 +148,5 @@ See also the Python documentation for session.Session and requests.Read and [Fac
 - Multiple search filters (search filters currently replace one another)
 
 [factual_docs]: http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3
-[factual_api_key]: http://www.factual.com/developers/api_key
-[factual_requests_KEY]: http://developer.factual.com/display/docs/Core+API+-+Composing+Requests#CoreAPI-ComposingRequests-KEY
-[factual_beta_signup]: http://www.factual.com/devtools/beta
+[factual_requests_KEY]: http://developer.factual.com/display/docs/Core+API+-+Oauth#CoreAPI-Oauth-KeysandSecrets
+[factual_signup]: https://www.factual.com/api-keys/request
