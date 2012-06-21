@@ -1,5 +1,9 @@
 import logging
-import httplib2
+try:
+	import asynchttp as http
+except ImportError:
+	import httplib2 as http
+
 try:
 	import simplejson as json
 except ImportError:
@@ -39,17 +43,35 @@ class BaseSession(object):
 			}
 	def get_headers(self, request, defaults={}):
 		return {}.update(defaults)
-	def run(self, request):
+	def run(self, request, async=False):
 		url = self.get_url(request)
 		headers = self.get_headers(request)
 
 		logging.debug(url)
 		logging.debug(headers)
 
-		h = httplib2.Http()
+		h = http.Http()
 		http_response, http_body = h.request(url, headers=headers)
-		# todo: timing and other metrics
-		meta = {}
-		response = request.make_response(json.loads(http_body), meta=meta)
-		return response
+
+		def get_response():
+			'''
+			Process and return the HTTP response from Factual.
+
+			Performs the post-request processing needed to handle a Factual 
+			response. Broken into a separate function so the post processing
+			can be deferred, e.g. for use with asynchttp in place of
+			httplib2. 
+
+			When the asynchttp module is installed, this call will block
+			if the HTTP request to Factual is not yet complete. 
+			'''
+			# todo: timing and other metrics
+			meta = {}
+			response = request.make_response(json.loads(str(http_body)), meta=meta)
+			return response
+
+		if async:
+			return get_response
+		else:
+			return get_response()
 

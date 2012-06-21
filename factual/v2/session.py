@@ -1,9 +1,4 @@
 import logging
-import httplib2
-try:
-	import simplejson as json
-except ImportError:
-	import json
 
 import requests
 import tables

@@ -147,6 +147,13 @@ See also the Python documentation for session.Session and requests.Read and [Fac
 - Write support for v3, when available
 - Multiple search filters (search filters currently replace one another)
 
+## Changelog
+
+- v0.1.2 - Add async option to Request.run() to permit delaying the processing of the HTTP response.
+           If the asynchttp module is installed, this will cause the initial call to run(async=True)
+		   to immediately return a get_response function, allowing you to defer the blocking 
+		   call until the results are needed. 
+
 [factual_docs]: http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3
 [factual_requests_KEY]: http://developer.factual.com/display/docs/Core+API+-+Oauth#CoreAPI-Oauth-KeysandSecrets
 [factual_signup]: https://www.factual.com/api-keys/request

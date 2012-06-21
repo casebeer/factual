@@ -1,10 +1,5 @@
 import logging
-try:
-	import simplejson as json
-except ImportError:
-	import json
 
-import httplib2
 import oauth2
 
 import requests

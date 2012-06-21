@@ -16,8 +16,23 @@ class Request(object):
 		self.session = session
 		# instantiate the table class if we're passed a type rather than an instance (or a string)
 		self.table = table() if isinstance(table, type) else table
-	def run(self):
-		return self.session.run(self)
+	def run(self, async=False):
+		'''
+		Perform the Factual API HTTP request. 
+
+		By default, process and return the API response wrapped in a
+		FactualResponse object. 
+
+		Pass `async = True` to perform the request asynchronously; in 
+		async mode, `run` returns a function, get_response, that will 
+		process and return the response when called. 
+		
+		Additionally, if the asynchttp module is available and async is
+		True, the initial HTTP request will not block, and get_response
+		will be returned immediately.  get_response function will block 
+		when called if the HTTP requst is not yet complete. 
+		'''
+		return self.session.run(self, async)
 	def make_response(self, *args, **kwargs):
 		response = self.response_type(*args, **kwargs)
 		return response
