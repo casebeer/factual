@@ -22,7 +22,7 @@ First, create a Session using your v3 API OAuth consumer key and consumer secret
                              consumer_secret="myOAuthConsumerSecret"
                              )
 
-Now, build a query using the <tt>read</tt> action on the <tt>"global"</tt> table:
+Now, build a query using the `read` action on the `"global"` table:
 
     query = session.read("global")
 
@@ -31,7 +31,7 @@ You can apply as many filters as you'd like to the query. Filters on a query are
     query.search("coffee")
 	query.filter({"locality": "Albany"}).filter({"region":"NY"})
 
-When you're done, <tt>run()</tt> the query and retrieve the results using the <tt>records()</tt> method:
+When you're done, `run()` the query and retrieve the results using the `records()` method:
 
 	from pprint import pprint
     
@@ -40,8 +40,8 @@ When you're done, <tt>run()</tt> the query and retrieve the results using the <t
 
 ### Geographic queries
 
-You probably want to search for places near a point. Use the <tt>within(latitude, longitude, radius_in_meters)</tt> 
-helper method of <tt>read</tt>.  <tt>within()</tt> chains and applies like any other filter, except that the
+You probably want to search for places near a point. Use the `within(latitude, longitude, radius_in_meters)` 
+helper method of `read`.  `within()` chains and applies like any other filter, except that the
 last call will overwrite earlier geo filters.  The underlying Factual filter API has changed between v2 and v3, but 
 this will work for both:
 
@@ -49,28 +49,28 @@ this will work for both:
 
 ### Pagination
 
-Get more results using <tt>count()</tt> and <tt>page()</tt>: 
+Get more results using `count()` and `page()`: 
 
     query.count(30).page(2) # 30 results per request, second page of results
 
-Note that Factual's API instead uses <tt>limit</tt> and <tt>offset</tt>, so I should probably change the wrapper to match.
+Note that Factual's API instead uses `limit` and `offset`, so I should probably change the wrapper to match.
 
 ### Categories
 
 Factual provides categories as hierarchical strings. That is, any place marked "Food & Beverage > Bakeries" 
 is in the "Bakeries" subcategory of "Food & Beverage." 
 
-It's possible to query for either specific subcategories or parent categories using the <tt>$bw</tt> 
-("begins with") filter operator.  You can then search across multiple of these <tt>$bw</tt> filters by 
-chaining them together with <tt>$or</tt>.
+It's possible to query for either specific subcategories or parent categories using the `$bw` 
+("begins with") filter operator.  You can then search across multiple of these `$bw` filters by 
+chaining them together with `$or`.
 
-Because this can get pretty lengthy, the <tt>category_helpers</tt> module has a <tt>make_category_filter</tt> function. 
-<tt>make_category_filter</tt> takes a list of category strings and combines them into a <tt>$bw</tt>/<tt>or</tt> filter.
-Since <tt>$bw</tt> will always include all subcategories of an supercategory listed, <tt>make_category_filter</tt> also
+Because this can get pretty lengthy, the `category_helpers` module has a `make_category_filter` function. 
+`make_category_filter` takes a list of category strings and combines them into a `$bw`/`or` filter.
+Since `$bw` will always include all subcategories of an supercategory listed, `make_category_filter` also
 dedupes the provided categories to generate the shortest list possible. This may mean that it will include more 
-subcategories than you indended; but if you want to get in to <tt>$and $not $bw</tt> tangles, you're on your own. 
+subcategories than you indended; but if you want to get in to `$and $not $bw` tangles, you're on your own. 
 
-Pass <tt>blank = True</tt> as a kwarg to <tt>make_category_filter</tt> if you also want results without categories set.
+Pass `blank = True` as a kwarg to `make_category_filter` if you also want results without categories set.
 
     from factual import category_helpers
 
@@ -83,12 +83,12 @@ Pass <tt>blank = True</tt> as a kwarg to <tt>make_category_filter</tt> if you al
 ### Non-OAuth requests
 
 It's possible to skip OAuth for the v3 API, if, for instance, there's some trouble with 
-signing requests. Creating a Session without a <tt>consumer_secret</tt> will authenticate
-requests via the <tt>KEY</tt> query string parameter rather than OAuth:
+signing requests. Creating a Session without a `consumer_secret` will authenticate
+requests via the `KEY` query string parameter rather than OAuth:
 
     non_oauth_session = factual.Session(consumer_key="myOAuthConsumerKey")
 
-Note that Factual [discourages falling back to the <tt>KEY</tt> parameter][factual_requests_KEY], 
+Note that Factual [discourages falling back to the `KEY` parameter][factual_requests_KEY], 
 and intends it for debugging use only, so use OAuth if possible.
 
 ## Examples
@@ -130,7 +130,7 @@ To use the v2 API, instantiate a factual.v2.Session object instead of a factual.
     v2_session = factual.v2.Session(api_key="deadbeef")
 	...
 
-Note that you'll need to provide a v2 API key using the <tt>api_key</tt> argument. Factual
+Note that you'll need to provide a v2 API key using the `api_key` argument. Factual
 issues v2 API keys via a different process than for v3 API credentials. 
     
 In the v2 API, you can also modify a record in the Playpen:
