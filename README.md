@@ -149,9 +149,9 @@ See also the Python documentation for session.Session and requests.Read and [Fac
 
 ## Changelog
 
-- v0.1.2 - Add async option to Request.run() to permit delaying the processing of the HTTP response.
-           If the asynchttp module is installed, this will cause the initial call to run(async=True)
-		   to immediately return a get_response function, allowing you to defer the blocking 
+- v0.1.2 - Add async option to `Request.run()` to permit delaying the processing of the HTTP response.
+           If the asynchttp module is installed, this will cause the initial call to `run(async=True)`
+		   to immediately return a `get_response` function, allowing you to defer the blocking 
 		   call until the results are needed. 
 
 [factual_docs]: http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3
