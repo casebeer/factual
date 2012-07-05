@@ -1,5 +1,6 @@
 *.swp
 *.pyc
+*.egg
 dist/
 build/
 factual.egg-info/
