@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
+import sys
+import subprocess
 
 required_modules = [
 	"simplejson",
@@ -11,6 +13,17 @@ required_modules = [
 
 with open("README.md", "rb") as f:
 	readme = f.read()
+
+try:
+	# avoid ReST at all costs, but make sure we have it for PyPi
+	proc = subprocess.Popen(
+		["pandoc", "-fmarkdown", "-trst", "README.md"], 
+		stdout=subprocess.PIPE
+	)
+	readme = proc.stdout.read()
+except:
+	if len(sys.argv) >=2 and sys.argv[1] in ["register", "upload"]:
+		raise Exception("Unable to convert Markdown README to ReST for upload to PyPi. Do you have pandoc installed?")
 
 setup(
 	name="factual",
