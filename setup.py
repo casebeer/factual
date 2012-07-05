@@ -22,8 +22,10 @@ try:
 	)
 	readme = proc.stdout.read()
 except:
-	if len(sys.argv) >=2 and sys.argv[1] in ["register", "upload"]:
-		raise Exception("Unable to convert Markdown README to ReST for upload to PyPi. Do you have pandoc installed?")
+	if len(sys.argv) >=2:
+		for command in ["register", "upload"]:
+			if command in sys.argv[1:]:
+				raise Exception("Unable to convert Markdown README to ReST for upload to PyPi. Do you have pandoc installed?")
 
 setup(
 	name="factual",
