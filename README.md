@@ -88,7 +88,7 @@ requests via the `KEY` query string parameter rather than OAuth:
 
     non_oauth_session = factual.Session(consumer_key="myOAuthConsumerKey")
 
-Note that Factual [discourages falling back to the `KEY` parameter][factual_requests_KEY], 
+Note that Factual [discourages falling back to the KEY parameter][factual_requests_KEY], 
 and intends it for debugging use only, so use OAuth if possible.
 
 ## Examples
