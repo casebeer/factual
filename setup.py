@@ -11,10 +11,11 @@ required_modules = [
 	"oauth2"
 	]
 
-with open("README.md", "rb") as f:
-	readme = f.read()
-
+readme = ""
 try:
+	with open("README.md", "rb") as f:
+		readme = f.read()
+
 	# avoid ReST at all costs, but make sure we have it for PyPi
 	proc = subprocess.Popen(
 		["pandoc", "-fmarkdown", "-trst", "README.md"], 
@@ -29,7 +30,7 @@ except:
 
 setup(
 	name="factual",
-	version="0.1.2",
+	version="0.1.3",
 	description="Wrapper for the Factual HTTP API.",
 	author="Christopher H. Casebeer",
 	author_email="",
